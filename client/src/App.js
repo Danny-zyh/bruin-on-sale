@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, AppBar, Typography, Grow, Grid} from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-
 import { getPosts } from './actions/posts';
 import Posts from './components/Posts/Posts';
 import Form from './components/Form/Form';
@@ -9,11 +8,12 @@ import useStyles from './styles';
 
 const App = () => {
   const classes = useStyles();
+  const [currentId, setCurrentId] = useState(null); // should be changed to use redux
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getPosts());
-  }, [dispatch])
+  }, [currentId, dispatch]) /// Every change would create new request
 
   return ( 
     <Container maxWidth="lg">
@@ -26,10 +26,10 @@ const App = () => {
         <Container>
           <Grid container justify="space-between" alignItems="stretch" spacein={3}>
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setCurrentId ={setCurrentId} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
           </Grid>
         </Container>
